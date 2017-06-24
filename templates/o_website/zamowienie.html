@@ -1,0 +1,123 @@
+{% extends "o_website/base.html" %}
+
+{% block content %}
+<div class="col-sm-10 col-sm-offset-1">
+    {% if request.GET.success %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        {% if request.GET.success == "edited_order" %}
+            Zamówienie zostało edytowane.
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Szczegóły zamówienia</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-3">
+                <strong>Klient:</strong>
+            </div>
+            <div class="col-sm-9">
+                    {{ zamowienie.klient }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Jadłodajnia:</strong>
+            </div>
+            <div class="col-sm-9">
+                    {{ zamowienie.sesja_obiadowa.jadlodajnia.nazwa }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Data obiadu:</strong>
+            </div>
+            <div class="col-sm-9">
+                {{ zamowienie.sesja_obiadowa.data_obiadu }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Godzina obiadu:</strong>
+            </div>
+            <div class="col-sm-9">
+                {{ zamowienie.sesja_obiadowa.godzina_obiadu }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Data zamówienia:</strong>
+            </div>
+            <div class="col-sm-9">
+                {{ zamowienie.sesja_obiadowa.data_zamowien }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Godzina zamówienia:</strong>
+            </div>
+            <div class="col-sm-9">
+                {{ zamowienie.sesja_obiadowa.godzina_zamowien }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Płatność:</strong>
+            </div>
+            <div class="col-sm-9">
+                {{ zamowienie.get_platnosc_display }}
+            </div>
+
+            <div class="col-sm-3">
+                <strong>Uwagi:</strong>
+            </div>
+            <div class="col-sm-9">
+                {% if zamowienie.uwagi %}
+                {{ zamowienie.uwagi }}
+                {% else %}
+                Pusto
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-6">
+                    <a href="{% url 'edytuj_zamowienie' zamowienie.id %}"><button type="button" class="btn btn-primary">Edytuj zamówienie</button></a>
+                    <a href="{% url 'usun_zamowienie' zamowienie.id %}"><button type="button" class="btn btn-primary">Usuń zamówienie</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Wybrane dania</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Danie</th>
+                    <th>Cena (szt.)</th>
+                    <th>Ilość</th>
+                    <th>Łączna cena</th>
+                </tr>
+                {% for e in zam %}
+                <tr>
+                    <td>{{ e.danie }}</td>
+                    <td>{{ e.danie.cena }}</td>
+                    <td>{{ e.ilosc }}</td>
+                    <td>{{ e.total_price }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Razem:</th>
+                    <th>{{ zamowienie.total_price }}</th>
+                </tr>
+            </table>
+
+            <div class="form-group">
+                <div class="col-sm-offset-6">
+                    <a href="{% url 'edytuj_zamowienie' zamowienie.id %}"><button type="button" class="btn btn-primary">Edytuj zamówienie</button></a>
+                    <a href="{% url 'usun_zamowienie' zamowienie.id %}"><button type="button" class="btn btn-primary">Usuń zamówienie</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

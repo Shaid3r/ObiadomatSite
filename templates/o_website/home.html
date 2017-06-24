@@ -1,0 +1,51 @@
+{% extends "o_website/base.html" %}
+
+{% block content %}
+<div class="col-sm-10 col-sm-offset-1">
+    {% if request.GET.login_required != Null %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Musisz się zalogować, aby uzyskać dostęp do tej strony.
+    </div>
+    {% endif %}
+    {% if request.GET.new != Null %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Rejestracja zakończona pomyślnie. Możesz się zalogować.
+    </div>
+    {% endif %}
+    <form class="form-horizontal" method="post" action="">
+        {% csrf_token %}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Zarejestruj się</h3>
+            </div>
+            <div class="panel-body">
+                {% for field in form %}
+                {% if field.errors %}
+                <div class="form-group has-error">
+                    <label for="{{ field.id_for_label }}" class="col-sm-3 control-label">{{ field.label }}:</label>
+                    <div class="col-sm-9">
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="col-sm-3 control-label">{{ field.label }}:</label>
+                    <div class="col-sm-9">
+                        {{ field }}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="form-group">
+                    <div class="col-sm-offset-8">
+                            <button type="submit" class="btn btn-primary">Zarejestruj się</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

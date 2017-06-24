@@ -1,0 +1,46 @@
+{% extends "o_website/base.html" %}
+
+{% block content %}
+<div class="col-sm-10 col-sm-offset-1">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Sesja obiadowa - raport</h3>
+        </div>
+        <div class="panel-body">
+            {% if not so %}
+                Pusto
+            {% else %}
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>Klient</th>
+                    <th>Płatność</th>
+                    <th>Uwagi</th>
+                    <th>Wydatek</th>
+                </tr>
+                {% for e in so %}
+                <tr>
+                    <td>{{ e.klient }}</td>
+                    <td>{{ e.get_platnosc_display }}</td>
+                    <td>{{ e.uwagi }}</td>
+                    <td>{{ e.total_price }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Razem</th>
+                    <th>{{ total_price }}</th>
+                </tr>
+            </table>
+            {% endif %}
+            <div class="form-group">
+                <div class="col-sm-offset-8">
+                        <button type="button" class="btn btn-primary" onclick="window.print()">
+                            <span class="glyphicon glyphicon-print"></span> Wydrukuj raport
+                        </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

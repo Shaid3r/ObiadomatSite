@@ -1,0 +1,87 @@
+{% extends "o_website/base.html" %}
+
+{% block content %}
+<div class="col-sm-10 col-sm-offset-1">
+    {% if request.GET.success %}
+    <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        {% if request.GET.success == "added_order" %}
+            Zamówienie zostało przyjęte.
+        {% elif request.GET.success == "deleted_order" %}
+            Zamówienie zostało usunięte.
+        {% endif %}
+    </div>
+    {% elif request.GET.error %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        {% if request.GET.error == "expired_order" %}
+            Nie możesz edytować zamówienia, data zamówień już minęła.
+        {% elif request.GET.error == "expired_dinner" %}
+            Nie możesz edytować zamówienia, data obiadu już minęła.
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Twoje zamówienia</h3>
+        </div>
+        <div class="panel-body">
+            {% if not zamowienia %}
+            Nie złożyłeś jeszcze żadnych zamówień.
+            {% else %}
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>#</th>
+                    <th>Jadłodalnia</th>
+                    <th>Data obiadu</th>
+                    <th>Godzina obiadu</th>
+                    <th>Łączna cena (zł)</th>
+                    <th></th>
+                </tr>
+                {% for e in zamowienia %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ e.sesja_obiadowa.jadlodajnia }}</td>
+                    <td>{{ e.sesja_obiadowa.data_obiadu }}</td>
+                    <td>{{ e.sesja_obiadowa.godzina_obiadu }}</td>
+                    <td>{{ e.total_price }}</td>
+                    <td><a href="{% url 'zamowienie' e.id %}">Szczegóły</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Dostępne sesje obiadowe</h3>
+        </div>
+        <div class="panel-body">
+            {% if not so %}
+            Nie możesz złożyć żadnego zamówienia.
+            {% else %}
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <th>#</th>
+                    <th>Twórca</th>
+                    <th>Jadłodalnia</th>
+                    <th>Data obiadu</th>
+                    <th>Godzina obiadu</th>
+                    <th></th>
+                </tr>
+                {% for e in so %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ e.tworca }}</td>
+                    <td>{{ e.jadlodajnia }}</td>
+                    <td>{{ e.data_obiadu }}</td>
+                    <td>{{ e.godzina_obiadu }}</td>
+                    <td><a href="{% url 'zamow' e.id %}">Zamów</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
